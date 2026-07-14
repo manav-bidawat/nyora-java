@@ -1,0 +1,49 @@
+name: Build & Publish
+
+# Build (verify) on every push/PR to main; publish to GitHub Packages on a
+# v* tag or manual dispatch. The engine source (nyora-shared) is checked out as
+# a SIBLING directory so the Gradle build's `../nyora-shared/src` srcDirs resolve.
+on:
+  push:
+    branches: [main]
+    tags: ['v*']
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - name: Checkout nyora-java
+        uses: actions/checkout@v4
+        with:
+          path: nyora-java
+
+      - name: Checkout nyora-shared (engine source, sibling)
+        uses: actions/checkout@v4
+        with:
+          repository: Hasan72341/nyora-shared
+          ref: main
+          path: nyora-shared
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: gradle/actions/setup-gradle@v4
+
+      - name: Build (compile + fat jar)
+        working-directory: nyora-java
+        run: ./gradlew build sdkJar --no-daemon --console=plain
+
+      - name: Publish to GitHub Packages
+        if: startsWith(github.ref, 'refs/tags/v') || github.event_name == 'workflow_dispatch'
+        working-directory: nyora-java
+        run: ./gradlew publish --no-daemon --console=plain
+        env:
+          GITHUB_ACTOR: ${{ github.actor }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
