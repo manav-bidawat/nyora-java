@@ -26,7 +26,7 @@ jobs:
       - name: Checkout nyora-shared (engine source, sibling)
         uses: actions/checkout@v4
         with:
-          repository: Hasan72341/nyora-shared
+          repository: Nyora-Manga/nyora-shared
           ref: main
           path: nyora-shared
 
