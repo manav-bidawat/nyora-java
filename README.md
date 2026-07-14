@@ -8,22 +8,32 @@ This is the JVM sibling of the [`nyora`](https://pypi.org/project/nyora/) (Pytho
 and `nyora-sdk` (JS) clients. Those talk to a helper over REST; on the JVM you
 don't need to — the engine *is* JVM code, so this SDK links it straight in.
 
+Requires Java 17+.
+
 ## Install
 
-Gradle (`build.gradle.kts`) — add the jitpack repo (for the parser engine) and
-the dependency:
+Published to **GitHub Packages**. Add the repo (GitHub Packages Maven requires a
+token — even for public packages — so supply a PAT with `read:packages`), plus
+jitpack for the engine's transitive `kotatsu-parsers` dependency:
 
 ```kotlin
 repositories {
     mavenCentral()
     maven("https://jitpack.io")
+    maven {
+        url = uri("https://maven.pkg.github.com/Hasan72341/nyora-java")
+        credentials {
+            username = providers.gradleProperty("gpr.user").orNull ?: System.getenv("GITHUB_ACTOR")
+            password = providers.gradleProperty("gpr.key").orNull ?: System.getenv("GITHUB_TOKEN")
+        }
+    }
 }
 dependencies {
     implementation("com.nyora:nyora-java:2.1.0")
 }
 ```
 
-Maven:
+Maven — same repo + credentials in `~/.m2/settings.xml`, then:
 
 ```xml
 <dependency>
@@ -33,7 +43,8 @@ Maven:
 </dependency>
 ```
 
-Requires Java 17+.
+**No-auth alternative — build from source** (below): `./gradlew publishToMavenLocal`
+puts `com.nyora:nyora-java:2.1.0` in your `~/.m2` for local consumers.
 
 ## Use (Java)
 
