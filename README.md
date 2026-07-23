@@ -21,7 +21,7 @@ repositories {
     mavenCentral()
     maven("https://jitpack.io")
     maven {
-        url = uri("https://maven.pkg.github.com/Hasan72341/nyora-java")
+        url = uri("https://maven.pkg.github.com/Nyora-Manga/nyora-java")
         credentials {
             username = providers.gradleProperty("gpr.user").orNull ?: System.getenv("GITHUB_ACTOR")
             password = providers.gradleProperty("gpr.key").orNull ?: System.getenv("GITHUB_TOKEN")

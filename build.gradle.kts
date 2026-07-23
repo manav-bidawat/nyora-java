@@ -135,7 +135,7 @@ publishing {
         if (ghUser.isPresent && ghKey.isPresent) {
             maven {
                 name = "GitHubPackages"
-                url = uri("https://maven.pkg.github.com/Hasan72341/nyora-java")
+                url = uri("https://maven.pkg.github.com/Nyora-Manga/nyora-java")
                 credentials {
                     username = ghUser.get()
                     password = ghKey.get()
@@ -149,7 +149,7 @@ publishing {
         pom {
             name.set("nyora-java")
             description.set("In-process Nyora sources SDK for the JVM — the native kotatsu-parsers engine (960+ manga/manhwa/manhua sources) as a library. No HTTP, no cloud.")
-            url.set("https://github.com/Hasan72341/nyora-java")
+            url.set("https://github.com/Nyora-Manga/nyora-java")
             licenses {
                 license {
                     name.set("Apache-2.0")
